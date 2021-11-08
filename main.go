@@ -15,10 +15,11 @@ type ElelvatorStatus struct {
 	lock     sync.RWMutex
 	position int
 	isUp     bool
+	isMoving bool
 }
 
 func main() {
-	elevatorStatus := ElelvatorStatus{lock: sync.RWMutex{}, position: 1, isUp: true}
+	elevatorStatus := ElelvatorStatus{lock: sync.RWMutex{}, position: 1, isUp: true, isMoving: true}
 	elevator := app.New()
 	go floodOne(elevator, elevatorStatus)
 	go floodTwo(elevator, elevatorStatus)
@@ -32,13 +33,17 @@ func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus) {
 	statusText := canvas.NewText("", color.Black)
 	go func() {
 		for true {
-			var tmpLabel string
+			tmpLabel := "> "
 			elevatorStatus.lock.RLock()
-			tmpLabel = strconv.Itoa(elevatorStatus.position) + " "
-			if elevatorStatus.isUp {
-				tmpLabel += "UP"
+			tmpLabel += strconv.Itoa(elevatorStatus.position) + " "
+			if elevatorStatus.isMoving {
+				if elevatorStatus.isUp {
+					tmpLabel += "UP"
+				} else {
+					tmpLabel += "DOWN"
+				}
 			} else {
-				tmpLabel += "DOWN"
+				tmpLabel += ""
 			}
 			elevatorStatus.lock.RUnlock()
 			statusText.Text = tmpLabel
