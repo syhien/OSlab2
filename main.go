@@ -23,13 +23,56 @@ func main() {
 	rand.Seed(time.Now().Unix())
 	elevatorStatus := ElelvatorStatus{lock: sync.RWMutex{}, position: rand.Intn(3) + 1, isUp: true, isMoving: rand.Float64() > 0.5}
 	elevator := app.New()
-	go floodOne(elevator, elevatorStatus)
-	go floodTwo(elevator, elevatorStatus)
-	go floodThree(elevator, elevatorStatus)
+	requestOne := make(chan int)
+	defer close(requestOne)
+	requestTwo := make(chan int)
+	defer close(requestTwo)
+	requestThree := make(chan int)
+	defer close(requestThree)
+	go floodOne(elevator, elevatorStatus, requestOne)
+	go floodTwo(elevator, elevatorStatus, requestTwo)
+	go floodThree(elevator, elevatorStatus, requestThree)
 	elevator.Run()
+	for true {
+		select {
+		case request <- requestOne:
+			for true {
+				elevatorStatus.lock.Lock()
+				if elevatorStatus.position == 1 {
+					elevatorStatus.lock.Unlock()
+					break
+				}
+				elevatorStatus.position--
+				elevatorStatus.lock.Unlock()
+				time.Sleep(5 * time.Second)
+			}
+		case request <- requestTwo:
+			for true {
+				elevatorStatus.lock.Lock()
+				if elevatorStatus.position == 2 {
+					elevatorStatus.lock.Unlock()
+					break
+				}
+				elevatorStatus.position = 2
+				elevatorStatus.lock.Unlock()
+				time.Sleep(5 * time.Second)
+			}
+		case request <- requestThree:
+			for true {
+				elevatorStatus.lock.Lock()
+				if elevatorStatus.position == 3 {
+					elevatorStatus.lock.Unlock()
+					break
+				}
+				elevatorStatus.position++
+				elevatorStatus.lock.Unlock()
+				time.Sleep(5 * time.Second)
+			}
+		}
+	}
 }
 
-func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus) {
+func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan chan int) {
 	winOne := elevator.NewWindow("1")
 	winOne.Resize(fyne.NewSize(200, 200))
 	titleText := canvas.NewText("Flood 1 Panel", color.Black)
@@ -58,7 +101,7 @@ func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus) {
 	winOne.Show()
 }
 
-func floodTwo(elevator fyne.App, elevatorStatus ElelvatorStatus) {
+func floodTwo(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan chan int) {
 	winTwo := elevator.NewWindow("2")
 	winTwo.Resize(fyne.NewSize(200, 200))
 	titleText := canvas.NewText("Flood 2 Panel", color.Black)
@@ -87,7 +130,7 @@ func floodTwo(elevator fyne.App, elevatorStatus ElelvatorStatus) {
 	winTwo.Show()
 }
 
-func floodThree(elevator fyne.App, elevatorStatus ElelvatorStatus) {
+func floodThree(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan chan int) {
 	winThree := elevator.NewWindow("3")
 	winThree.Resize(fyne.NewSize(200, 200))
 	titleText := canvas.NewText("Flood 3 Panel", color.Black)
