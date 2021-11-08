@@ -6,8 +6,10 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"image/color"
+	"math/rand"
 	"strconv"
 	"sync"
+	"time"
 )
 
 type ElelvatorStatus struct {
@@ -18,7 +20,8 @@ type ElelvatorStatus struct {
 }
 
 func main() {
-	elevatorStatus := ElelvatorStatus{lock: sync.RWMutex{}, position: 1, isUp: true, isMoving: true}
+	rand.Seed(time.Now().Unix())
+	elevatorStatus := ElelvatorStatus{lock: sync.RWMutex{}, position: rand.Intn(3) + 1, isUp: true, isMoving: rand.Float64() > 0.5}
 	elevator := app.New()
 	go floodOne(elevator, elevatorStatus)
 	go floodTwo(elevator, elevatorStatus)
