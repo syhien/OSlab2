@@ -236,6 +236,8 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 func floodOne(elevator fyne.App, elevatorStatus *ElelvatorStatus, requestChan chan int) {
 	winOne := elevator.NewWindow("1")
 	winOne.Resize(fyne.NewSize(200, 200))
+	icon, _ := fyne.LoadResourceFromPath("Icon.png")
+	winOne.SetIcon(icon)
 	titleLabel := widget.NewLabel("Flood 1 Panel")
 	titleLabel.TextStyle = fyne.TextStyle{Bold: true}
 	statusText := widget.NewLabel("")
@@ -275,6 +277,8 @@ func floodOne(elevator fyne.App, elevatorStatus *ElelvatorStatus, requestChan ch
 func floodTwo(elevator fyne.App, elevatorStatus *ElelvatorStatus, requestChan chan int) {
 	winTwo := elevator.NewWindow("2")
 	winTwo.Resize(fyne.NewSize(200, 200))
+	icon, _ := fyne.LoadResourceFromPath("Icon.png")
+	winTwo.SetIcon(icon)
 	titleLabel := widget.NewLabel("Flood 2 Panel")
 	titleLabel.TextStyle = fyne.TextStyle{Bold: true}
 	statusLable := widget.NewLabel("")
@@ -314,6 +318,8 @@ func floodTwo(elevator fyne.App, elevatorStatus *ElelvatorStatus, requestChan ch
 func floodThree(elevator fyne.App, elevatorStatus *ElelvatorStatus, requestChan chan int) {
 	winThree := elevator.NewWindow("3")
 	winThree.Resize(fyne.NewSize(200, 200))
+	icon, _ := fyne.LoadResourceFromPath("Icon.png")
+	winThree.SetIcon(icon)
 	titleLabel := widget.NewLabel("Flood 3 Panel")
 	titleLabel.TextStyle = fyne.TextStyle{Bold: true}
 	statusLabel := widget.NewLabel("")
