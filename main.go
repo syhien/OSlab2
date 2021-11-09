@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
 	"image/color"
 	"math/rand"
 	"strconv"
@@ -75,9 +76,9 @@ func main() {
 func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan chan int) {
 	winOne := elevator.NewWindow("1")
 	winOne.Resize(fyne.NewSize(200, 200))
-	titleText := canvas.NewText("Flood 1 Panel", color.Black)
-	titleText.TextStyle = fyne.TextStyle{Bold: true}
-	statusText := canvas.NewText("", color.Black)
+	titleLabel := widget.NewLabel("Flood 1 Panel")
+	titleLabel.TextStyle = fyne.TextStyle{Bold: true}
+	statusText := widget.NewLabel("")
 	go func() {
 		for true {
 			tmpLabel := "> "
@@ -96,7 +97,8 @@ func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan cha
 			statusText.Text = tmpLabel
 		}
 	}()
-	content := container.NewVBox(titleText, statusText)
+
+	content := container.NewVBox(titleLabel, statusText)
 	winOne.SetContent(content)
 	winOne.Show()
 }
@@ -104,9 +106,9 @@ func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan cha
 func floodTwo(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan chan int) {
 	winTwo := elevator.NewWindow("2")
 	winTwo.Resize(fyne.NewSize(200, 200))
-	titleText := canvas.NewText("Flood 2 Panel", color.Black)
-	titleText.TextStyle = fyne.TextStyle{Bold: true}
-	statusText := canvas.NewText("", color.Black)
+	titleLabel := widget.NewLabel("Flood 2 Panel")
+	titleLabel.TextStyle = fyne.TextStyle{Bold: true}
+	statusText := widget.NewLabel("")
 	go func() {
 		for true {
 			tmpLabel := "> "
@@ -125,7 +127,7 @@ func floodTwo(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan cha
 			statusText.Text = tmpLabel
 		}
 	}()
-	content := container.NewVBox(titleText, statusText)
+	content := container.NewVBox(titleLabel, statusText)
 	winTwo.SetContent(content)
 	winTwo.Show()
 }
@@ -133,9 +135,9 @@ func floodTwo(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan cha
 func floodThree(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan chan int) {
 	winThree := elevator.NewWindow("3")
 	winThree.Resize(fyne.NewSize(200, 200))
-	titleText := canvas.NewText("Flood 3 Panel", color.Black)
-	titleText.TextStyle = fyne.TextStyle{Bold: true}
-	statusText := canvas.NewText("", color.Black)
+	titleLabel := widget.NewLabel("Flood 3 Panel")
+	titleLabel.TextStyle = fyne.TextStyle{Bold: true}
+	statusLabel := widget.NewLabel("")
 	go func() {
 		for true {
 			tmpLabel := "> "
@@ -151,10 +153,10 @@ func floodThree(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan c
 				tmpLabel += ""
 			}
 			elevatorStatus.lock.RUnlock()
-			statusText.Text = tmpLabel
+			statusLabel.Text = tmpLabel
 		}
 	}()
-	content := container.NewVBox(titleText, statusText)
+	content := container.NewVBox(titleLabel, statusLabel)
 	winThree.SetContent(content)
 	winThree.Show()
 }
