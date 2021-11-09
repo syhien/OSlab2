@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
-	"image/color"
 	"math/rand"
 	"strconv"
 	"sync"
@@ -33,44 +33,19 @@ func main() {
 	go floodOne(elevator, elevatorStatus, requestOne)
 	go floodTwo(elevator, elevatorStatus, requestTwo)
 	go floodThree(elevator, elevatorStatus, requestThree)
-	elevator.Run()
-	for true {
-		select {
-		case request <- requestOne:
-			for true {
-				elevatorStatus.lock.Lock()
-				if elevatorStatus.position == 1 {
-					elevatorStatus.lock.Unlock()
-					break
-				}
-				elevatorStatus.position--
-				elevatorStatus.lock.Unlock()
-				time.Sleep(5 * time.Second)
-			}
-		case request <- requestTwo:
-			for true {
-				elevatorStatus.lock.Lock()
-				if elevatorStatus.position == 2 {
-					elevatorStatus.lock.Unlock()
-					break
-				}
-				elevatorStatus.position = 2
-				elevatorStatus.lock.Unlock()
-				time.Sleep(5 * time.Second)
-			}
-		case request <- requestThree:
-			for true {
-				elevatorStatus.lock.Lock()
-				if elevatorStatus.position == 3 {
-					elevatorStatus.lock.Unlock()
-					break
-				}
-				elevatorStatus.position++
-				elevatorStatus.lock.Unlock()
-				time.Sleep(5 * time.Second)
+	go func() {
+		for true {
+			select {
+			case request := <-requestOne:
+				fmt.Println(request)
+			case request := <-requestTwo:
+				fmt.Println(request)
+			case request := <-requestThree:
+				fmt.Println(request)
 			}
 		}
-	}
+	}()
+	elevator.Run()
 }
 
 func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan chan int) {
@@ -97,8 +72,15 @@ func floodOne(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan cha
 			statusText.Text = tmpLabel
 		}
 	}()
-
-	content := container.NewVBox(titleLabel, statusText)
+	goto2Button := widget.NewButton("2", func() {
+		dialog.NewInformation("Flood 1", "2 pressed", winOne).Show()
+		requestChan <- 2
+	})
+	goto3Button := widget.NewButton("3", func() {
+		dialog.NewInformation("Flood 1", "3 pressed", winOne).Show()
+		requestChan <- 3
+	})
+	content := container.NewVBox(titleLabel, statusText, goto2Button, goto3Button)
 	winOne.SetContent(content)
 	winOne.Show()
 }
@@ -127,7 +109,15 @@ func floodTwo(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan cha
 			statusText.Text = tmpLabel
 		}
 	}()
-	content := container.NewVBox(titleLabel, statusText)
+	goto1Button := widget.NewButton("1", func() {
+		dialog.NewInformation("Flood 2", "1 pressed", winTwo).Show()
+		requestChan <- 1
+	})
+	goto3Button := widget.NewButton("3", func() {
+		dialog.NewInformation("Flood 2", "3 pressed", winTwo).Show()
+		requestChan <- 3
+	})
+	content := container.NewVBox(titleLabel, statusText, goto1Button, goto3Button)
 	winTwo.SetContent(content)
 	winTwo.Show()
 }
@@ -156,7 +146,15 @@ func floodThree(elevator fyne.App, elevatorStatus ElelvatorStatus, requestChan c
 			statusLabel.Text = tmpLabel
 		}
 	}()
-	content := container.NewVBox(titleLabel, statusLabel)
+	goto1Button := widget.NewButton("1", func() {
+		dialog.NewInformation("Flood 3", "1 pressed", winThree).Show()
+		requestChan <- 1
+	})
+	goto2Button := widget.NewButton("2", func() {
+		dialog.NewInformation("Flood 3", "2 pressed", winThree).Show()
+		requestChan <- 2
+	})
+	content := container.NewVBox(titleLabel, statusLabel, goto1Button, goto2Button)
 	winThree.SetContent(content)
 	winThree.Show()
 }
