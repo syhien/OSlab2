@@ -69,6 +69,8 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 						elevatorStatus.lock.Unlock()
 					}
 				}
+			} else {
+				elevatorStatus.lock.Unlock()
 			}
 			time.Sleep(3 * time.Second)
 			for true {
@@ -126,6 +128,8 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 						elevatorStatus.lock.Unlock()
 					}
 				}
+			} else {
+				elevatorStatus.lock.Unlock()
 			}
 			time.Sleep(3 * time.Second)
 			for true {
@@ -183,6 +187,8 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 						elevatorStatus.lock.Unlock()
 					}
 				}
+			} else {
+				elevatorStatus.lock.Unlock()
 			}
 			time.Sleep(3 * time.Second)
 			for true {
