@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
@@ -34,12 +33,6 @@ func main() {
 	go floodTwo(elevator, &elevatorStatus, requestTwo)
 	go floodThree(elevator, &elevatorStatus, requestThree)
 	go elevatorController(&elevatorStatus, requestOne, requestTwo, requestThree)
-	//go func() {
-	//	for true {
-	//		fmt.Println("电梯所在" + strconv.Itoa(elevatorStatus.position))
-	//		time.Sleep(1 * time.Second)
-	//	}
-	//}()
 	elevator.Run()
 }
 
@@ -50,7 +43,6 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 			senderPosition := 1
 			elevatorStatus.lock.Lock()
 			if elevatorStatus.position != senderPosition {
-				fmt.Println("来sender咯")
 				elevatorStatus.isMoving = true
 				elevatorStatus.lock.Unlock()
 				for true {
@@ -78,9 +70,7 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 					}
 				}
 			}
-			fmt.Println("到sender咯")
-			time.Sleep(5 * time.Second)
-			fmt.Println("去目的地咯")
+			time.Sleep(3 * time.Second)
 			for true {
 				elevatorStatus.lock.Lock()
 				elevatorStatus.isMoving = true
@@ -106,12 +96,10 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 					elevatorStatus.lock.Unlock()
 				}
 			}
-			fmt.Println("到目的地咯")
 		case request := <-requestTwo:
 			senderPosition := 2
 			elevatorStatus.lock.Lock()
 			if elevatorStatus.position != senderPosition {
-				fmt.Println("来sender咯")
 				elevatorStatus.isMoving = true
 				elevatorStatus.lock.Unlock()
 				for true {
@@ -139,9 +127,7 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 					}
 				}
 			}
-			fmt.Println("到sender咯")
-			time.Sleep(5 * time.Second)
-			fmt.Println("去目的地咯")
+			time.Sleep(3 * time.Second)
 			for true {
 				elevatorStatus.lock.Lock()
 				elevatorStatus.isMoving = true
@@ -167,12 +153,10 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 					elevatorStatus.lock.Unlock()
 				}
 			}
-			fmt.Println("到目的地咯")
 		case request := <-requestThree:
 			senderPosition := 3
 			elevatorStatus.lock.Lock()
 			if elevatorStatus.position != senderPosition {
-				fmt.Println("来sender咯")
 				elevatorStatus.isMoving = true
 				elevatorStatus.lock.Unlock()
 				for true {
@@ -200,9 +184,7 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 					}
 				}
 			}
-			fmt.Println("到sender咯")
-			time.Sleep(5 * time.Second)
-			fmt.Println("去目的地咯")
+			time.Sleep(3 * time.Second)
 			for true {
 				elevatorStatus.lock.Lock()
 				elevatorStatus.isMoving = true
@@ -228,7 +210,6 @@ func elevatorController(elevatorStatus *ElelvatorStatus, requestOne chan int, re
 					elevatorStatus.lock.Unlock()
 				}
 			}
-			fmt.Println("到目的地咯")
 		}
 	}
 }
