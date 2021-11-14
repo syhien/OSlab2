@@ -6,29 +6,13 @@
 
 ## 运行
 
-### 从code运行
+在 [Github Release](https://github.com/syhien/OSlab2/releases/latest) 下载对应的二进制文件运行
 
-```shell
-$ go get fyne.io/fyne/v2
-$ go run main.go
-```
+- OSlab2.exe for Windows
+- OSlab2_darwin for Mac OS
+- OSlab2_linux for Linux
 
-### 二进制文件运行
-
-#### Windows & Mac OS
-
-在[Github Release](https://github.com/syhien/OSlab2/releases/latest)中下载对应二进制文件运行
-
-*程序在开发过程中仓库为Private状态，本report提交后将转为Public*
-
-#### Linux各发行版
-
-```shell
-$ go get fyne.io/fyne/v2
-$ go get fyne.io/fyne/v2/cmd/fyne
-$ fyne package -os linux
-$ ./OSlab2
-```
+*注：仓库在开发过程中为Private状态，本report提交后将转为Public*
 
 ## 开发环境
 
